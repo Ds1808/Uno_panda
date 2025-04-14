@@ -28,6 +28,11 @@ const router = createRouter({
       name: "CreateGame",
       component: () => import("../views/CreateGame.vue"),
     },
+    {
+      path: "/unirsePartida",
+      name: "Partida",
+      component: () => import("../views/FormUnirse.vue"),
+    },
   ],
 });
 
