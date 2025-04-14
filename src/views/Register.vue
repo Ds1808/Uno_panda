@@ -20,11 +20,11 @@ import Logo from '../components/logo.vue'
                 <label class="form-label">Contraseña</label>
                 <input type="password" class="form-control border-bottom border-4" v-model="password" />
             </div>
-            <div class="col-md-5 d-grid mb-0">
+            <div class="col-md-5 d-grid w-50">
                 <button type="submit" class="btn btn-dark">Registrarse</button>
             </div>
-            <p class=" col-md-5 text-center mt-1">
-                ¿Ya tienes cuenta? <router-link to="/">Inicia sesión</router-link>
+            <p class="col-md-5 text-center w-50">
+                ¿Ya tienes cuenta? <router-link to="/login">Inicia sesión</router-link>
             </p>
         </div>
     </main>
