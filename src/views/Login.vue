@@ -8,22 +8,22 @@ import Logo from '../components/logo.vue'
             <Logo />
         </div>
         <div class="row">
-            <div class="col-md-5 mb-4 w-100">
+            <div class="col-md-6 mb-4 w-100">
                 <label class="form-label">Nombre de usuario</label>
                 <input type="text" class="form-control border-bottom border-4" v-model="name" />
             </div>
-            <div class="col-md-5 mb-4 w-100">
+            <div class="col-md-6 mb-4 w-100">
                 <label class="form-label">Correo electrónico</label>
                 <input type="email" class="form-control border-bottom border-4" v-model="email" />
             </div>
-            <div class="col-md-5 mb-4 w-100">
+            <div class="col-md-6 mb-4 w-100">
                 <label class="form-label">Contraseña</label>
                 <input type="password" class="form-control border-bottom border-4" v-model="password" />
             </div>
-            <div class="col-md-5 d-grid mb-0">
+            <div class="d-grid mb-0">
                 <button type="submit" class="btn btn-dark">Registrarse</button>
             </div>
-            <p class=" col-md-5 text-center mt-1">
+            <p class="text-center mt-1">
                 ¿Ya tienes cuenta? <router-link to="/">Inicia sesión</router-link>
             </p>
         </div>
