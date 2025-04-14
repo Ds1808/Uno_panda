@@ -9,7 +9,7 @@
 
       <!-- Código de sala -->
       <div class="col-12 text-center mb-1">
-        <CodigoSala :codigo="'1234'" />
+        <CodigoSala :codigo="codigoSala"/>
       </div>
       <!-- Lista de jugadores -->
       <div class="col-12 text-center">
@@ -38,9 +38,20 @@ export default {
   },
   data() {
     return {
-      jugadores: [], // Asegúrate de definir esta propiedad con los datos necesarios
+        codigoSala: '',
+        jugadores: [], 
     };
   },
+  methods: {
+    GenerarCodigo() {
+        console.log('Generando Codigo de la partida...');
+        const codigo = Math.floor(1000 + Math.random() * 9000).toString();
+        this.codigoSala = codigo;
+    },
+  },
+    mounted() {
+    this.GenerarCodigo();
+    },
 };
 </script>
 
