@@ -17,12 +17,12 @@ const toggleForm = () => {
             <Logo />
         </div>
         <div class="row">
-            <component :is="showLogin ? FormLogin : FormRegister" />
+            <FormLogin/>
         </div>
         <div class="row mt-3">
-            <button class="btn btn-primary" @click="toggleForm">
-                {{ showLogin ? 'Registrarse' : 'Iniciar sesión' }}
-            </button>
+            <a class="" @click="toggleForm">
+                Registrarse
+            </a>
         </div>
     </main>
 </template>
@@ -31,5 +31,5 @@ const toggleForm = () => {
     .logo-container {
         width: 40%;
         max-width: 300px;
-    }
+}
 </style>
