@@ -1,27 +1,33 @@
 <template>
-    <main class="container justify-content-center align-items-center d-flex flex-column" style="height: 100vh;">
-        <div class="row logo-container mb-4">
-            <Logo />
-        </div>
-        <div class="row">
-            <div class="col-md-5 mb-4 w-100">
-                <label class="form-label">Nombre de usuario</label>
-                <input type="text" class="form-control border-bottom border-4" v-model="name" />
+    <main class="d-flex justify-content-center align-items-center flex-column body" style="height: 100vh;">
+        <div class="row w-25 container"></div>
+        <!-- Logo en la parte superior -->
+            <div class="col-12 mx-auto logo-container m-2">
+                <logo class="logo-small" />
             </div>
-            <div class="col-md-5 mb-4 w-100">
-                <label class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control border-bottom border-4" v-model="email" />
+
+        <!-- Formulario de registro -->
+        <div class="row justify-content-center w-100">
+            <div class="col-md-6">
+                <div class="mb-4">
+                    <label class="form-label">Nombre de usuario</label>
+                    <input type="text" class="form-control border-bottom border-4" v-model="name" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control border-bottom border-4" v-model="email" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control border-bottom border-4 " v-model="password" />
+                </div>
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-outline-warning fw-bold" @click="handleRegister">Registrarse</button>
+                </div>
+                <p class="text-center">
+                    ¿Ya tienes cuenta? <router-link to="/login">Iniciar sesión</router-link>
+                </p>
             </div>
-            <div class="col-md-5 mb-4 w-100">
-                <label class="form-label">Contraseña</label>
-                <input type="password" class="form-control border-bottom border-4" v-model="password" />
-            </div>
-            <div class="col-md-5 d-grid mb-0">
-                <button type="submit" class="btn btn-dark" @click="handleRegister">Registrarse</button>
-            </div>
-            <p class="col-md-5 text-center mt-1">
-                ¿Ya tienes cuenta? <router-link to="/">Inicia sesión</router-link>
-            </p>
         </div>
     </main>
 </template>
@@ -68,8 +74,12 @@ const handleRegister = async () => {
 };
 </script>
 
-<style>
+<style >
 .logo-container {
-    width: 40%;
+        width: 10%;
+    } 
+.body{
+    background-color: #1f1f2e;
+    color: white;
 }
 </style>

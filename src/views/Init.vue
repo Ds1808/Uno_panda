@@ -12,24 +12,23 @@ const toggleForm = () => {
 </script>
 
 <template>
-    <main class="container justify-content-center align-items-center d-flex flex-column" style="height: 100vh;">
-        <div class="row logo-container mb-4 mx-auto">
-            <Logo />
-        </div>
+    <main class="d-flex justify-content-center align-items-center flex-column body vh-100" >
+        <div class="col-12 mx-auto logo-container m-2">
+                <logo class="logo-small" />
+            </div>
         <div class="row">
             <FormLogin/>
         </div>
         <div class="row mt-3">
-            <a class="" @click="toggleForm">
-                Registrarse
-            </a>
+            <p class="text-center" @click="toggleForm">
+                No tienes cuenta? <router-link to="/">Registrate</router-link>
+            </p>
         </div>
     </main>
 </template>
 
-<style>
+<style >
     .logo-container {
-        width: 40%;
-        max-width: 300px;
-}
+        width: 10%;
+    }   
 </style>
