@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth"; // Importar el servicio de autenticación
+import { getFirestore } from "firebase/firestore"; // Importar el servicio de Firestore
+import { getAnalytics } from "firebase/analytics"; // Importar analíticas
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Tu configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBmfcEdZryzUCdFEy8pl0x58SW5HWAhH-Y",
   authDomain: "proyecto-uno-e7802.firebaseapp.com",
@@ -13,6 +14,13 @@ const firebaseConfig = {
   measurementId: "G-TV2ZLFGWJY"
 };
 
-// Initialize Firebase
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// Obtener los servicios que necesitas
+const auth = getAuth(app); // Autenticación
+const db = getFirestore(app); // Firestore
+const analytics = getAnalytics(app); // Analítica
+
+// Exportar los servicios para usarlos en otras partes de tu aplicación
+export { auth, db, analytics };
