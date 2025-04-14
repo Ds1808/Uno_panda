@@ -1,5 +1,6 @@
 <script setup>
 import Logo from "../components/logo.vue";
+import { RouterLink } from "vue-router";
 </script>
 
 <template>
@@ -9,8 +10,10 @@ import Logo from "../components/logo.vue";
     <Logo class="row logo-container mb-4" />
 
     <div class="d-grid gap-3 w-100" style="max-width: 300px">
-      <button class="btn btn-outline-danger btn-lg">Crear sala</button>
-      <button class="btn btn-outline-primary btn-lg">Unirse a sala</button>
+      <RouterLink class="btn btn-outline-danger btn-lg">Crear sala</RouterLink>
+      <RouterLink class="btn btn-outline-primary btn-lg"
+        >Unirse a sala</RouterLink
+      >
     </div>
 
     <button class="btn btn-dark mt-5 px-4 py-2">Cerrar sesión</button>
