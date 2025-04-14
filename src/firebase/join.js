@@ -40,7 +40,7 @@ export function Jion()  {
         const { displayName, uid } = user;
         const jugadorActual = displayName || "Jugador";
 
-        const jugadoresRef = collection(db, `partidas/${codigoIngresado.value}/jugadores`);
+        const jugadoresRef = collection(db, `partidas/${codigoIngresado.value}/`);
         const jugadorDocRef = doc(jugadoresRef, uid);
         const jugadorSnap = await getDoc(jugadorDocRef);
 
