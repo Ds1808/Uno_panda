@@ -1,9 +1,9 @@
 <template>
   <div class="vh-100 d-flex flex-column justify-content-center align-items-center sala">
-    <div class="row w-25 container">
+    <div class="row w-50 container">
       <!-- Logo en la parte superior -->
 
-        <div class="col-12 w-50 mx-auto">
+        <div class="col-12 w-25 mx-auto">
           <logo class="logo-small" />
         </div>
 
@@ -15,10 +15,16 @@
       <div class="col-12 text-center">
         <ListaJugadores :jugadores="jugadores" />
       </div>
-      <!-- Botón para iniciar el juego -->
-      <div class="col-12 text-center mt-2">
-        <BtnIniciar @iniciar="iniciarJuego" />
+      
+      <div class="row mt-2">
+        <div class="col-6 text-center">
+          <BtnIniciar @iniciar="iniciarJuego" />
+        </div>
+        <div class="col-6 text-center">
+          <BtnSalirLobby />
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -28,6 +34,7 @@ import logo from '@/components/logo.vue';
 import CodigoSala from '@/components/CreateGame/CodigoSala.vue';
 import ListaJugadores from '@/components/CreateGame/ListaJugadores.vue';
 import BtnIniciar from '@/components/CreateGame/BtnIniciar.vue';
+import BtnSalirLobby from '@/components/CreateGame/BtnSalirLobby.vue';  
 
 export default {
   components: {
@@ -35,6 +42,7 @@ export default {
     CodigoSala,
     ListaJugadores,
     BtnIniciar,
+    BtnSalirLobby,
   },
   data() {
     return {
