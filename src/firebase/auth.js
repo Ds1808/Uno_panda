@@ -1,4 +1,4 @@
-    import { auth, db } from './config' //llamamos la autentificacion y la base de datos
+import { auth, db } from './config' //llamamos la autentificacion y la base de datos
     import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'//trae las funciones propias de firebase
     import { doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 
@@ -57,10 +57,10 @@
     async login({ email, password }) {
         try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
-        const userProfile = await this.getUserProfile(userCredential.user.uid)
+        //const userProfile = await this.getUserProfile(userCredential.user.uid)
         return {
             user: userCredential.user,
-            profile: userProfile,
+            //profile: userProfile,
             success: true
         }
         } catch (error) {
@@ -79,9 +79,6 @@
     },
 
     // Crear perfil de usuario en Firestore
-    
-    //se guarda en la base de datos
-    // Obtener perfil de usuario
     async createUserProfile(userId, userData) {
         try {
         await setDoc(doc(db, 'users', userId), {
@@ -95,7 +92,20 @@
         }
     },
     
-
+    // Obtener perfil de usuario desde Firestore
+    async getUserProfile(userId) {
+        try {
+            const userDoc = await getDoc(doc(db, 'users', userId));
+            if (userDoc.exists()) {
+                return userDoc.data(); // Devuelve los datos del perfil del usuario
+            } else {
+                throw new Error('Perfil de usuario no encontrado');
+            }
+        } catch (error) {
+            console.error('Error obteniendo el perfil del usuario:', error);
+            throw error;
+        }
+    },
 
     // Manejador de errores de autenticación
     handleAuthError(error) {
@@ -115,4 +125,4 @@
         code: error.code
         }
     }
-} 
+}
