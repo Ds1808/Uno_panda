@@ -9,12 +9,17 @@
       <RouterLink to="/unirsePartida" class="btn btn-primary btn-lg">Unirse a sala</RouterLink>
     </div>
 
-    <button
-      class="btn btn-outline-warning fw-bold mt-5 px-4 py-2"
-      @click="cerrarSesion"
-    >
-      Cerrar sesión
-    </button>
+    <div class="d-flex gap-3 mt-4">
+        <button
+        class="btn btn-outline-warning fw-bold mt-5 px-4 py-2"
+        @click="cerrarSesion"
+      >
+        Cerrar sesión
+      </button>
+      <button class="btn btn-outline-success fw-bold mt-5 px-4 py-2 bi bi-person-fill-gear" @click="mostrarAlerta">
+      </button>
+    </div>
+
   </div>
 </template>
 
@@ -141,7 +146,12 @@ window.selectAvatar = (avatarId) => {
 
 // Agregar evento para mostrar la alerta al cargar la página
 onMounted(() => {
-  mostrarAlerta();
+  const savedUsername = localStorage.getItem("username");
+  const savedAvatar = localStorage.getItem("avatar");
+  
+  if (!savedUsername || !savedAvatar) {
+    mostrarAlerta();
+  }
 });
 </script>
 
