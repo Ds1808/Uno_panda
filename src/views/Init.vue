@@ -54,7 +54,7 @@ const handleLogin = async () => {
 
         if (success) {
             Swal.fire('¡Inicio de sesión exitoso!', `Bienvenido`, 'success');
-            router.push('/CreateGame'); // Redirige a CreateGame.vue
+            router.push('/lobbyInicio'); // Redirige a RegisterOpen.vue
         } else {
             Swal.fire('Error', error || 'Correo o contraseña incorrectos.', 'error');
         }
