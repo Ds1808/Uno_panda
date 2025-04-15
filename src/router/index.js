@@ -30,7 +30,7 @@ const router = createRouter({
     },
     {
       path: "/unirsePartida",
-      name: "Partida",
+      name: "unirsePartida",
       component: () => import("../views/FormUnirse.vue"),
     },
     {
