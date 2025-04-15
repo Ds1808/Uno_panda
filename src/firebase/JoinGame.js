@@ -30,7 +30,7 @@ export function useJoinGame() {
                 return;
             }
 
-            const { uid, displayName, email } = user;
+            const { uid, displayName } = user; // Eliminamos el email aquí
 
             // Referencia al documento del jugador en la colección "players"
             const playerRef = doc(db, "players", uid);
@@ -40,7 +40,6 @@ export function useJoinGame() {
             if (!playerSnap.exists()) {
                 const newPlayerData = {
                     nickname: displayName || "Jugador",
-                    email: email || "Sin correo",
                     avatar_url: `https://avatars.dicebear.com/api/initials/${(displayName || "Jugador").charAt(0)}.svg`,
                     created_at: new Date().toISOString(),
                 };
@@ -51,7 +50,7 @@ export function useJoinGame() {
 
             const playerData = (await getDoc(playerRef)).data(); // Obtener los datos del jugador recién creado o existente
             const jugadoresRef = collection(db, `games/${codigoIngresado}/game_participants`);
-            const jugadorDocRef = doc(jugadoresRef, uid);
+            const jugadorDocRef = doc(jugadoresRef, uid); // Usar el uid como ID del documento
             const jugadorSnap = await getDoc(jugadorDocRef);
 
             if (jugadorSnap.exists()) {
@@ -71,8 +70,10 @@ export function useJoinGame() {
                 return;
             }
 
-            const ordenTurno = jugadoresSnapshot.size + 1;
-            await setDoc(jugadorDocRef, { ...playerData, ordenTurno, uid });
+            const player_position = jugadoresSnapshot.size + 1;
+
+            // Guardar el uid del usuario como player_id en la colección game_participants
+            await setDoc(jugadorDocRef, { player_id: uid, player_position });
 
             Swal.fire({
                 title: "Nuevo jugador en la sala",
