@@ -9,7 +9,7 @@ const router = createRouter({
       component: () => import("../views/RegisterOpen.vue"), // Ruta predeterminada al registro
     },
     {
-      path: "/gameBoard",
+      path: '/game/:codigo',
       name: "game-board",
       component: () => import("../views/GameBoard.vue"),
     },
