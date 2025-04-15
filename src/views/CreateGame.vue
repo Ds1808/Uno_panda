@@ -41,6 +41,7 @@ import {
   escucharJugadoresDePartida,
   obtenerPlayerIdDesdeUserId 
   } from '@/firebase/createGame.js'; 
+import Swal from 'sweetalert2';
 
 
 
@@ -83,6 +84,11 @@ export default {
         });
 
       } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo crear el juego.',
+        });
         console.error('❌ Error creando juego:', err);
         this.error = err.message;
       }

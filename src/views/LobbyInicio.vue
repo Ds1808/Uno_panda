@@ -181,7 +181,7 @@ window.selectAvatar = (avatarId) => {
 };
 </script>
 
-<style scoped>
+<style >
 .logo-container {
   width: 15%;
 }
