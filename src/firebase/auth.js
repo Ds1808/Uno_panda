@@ -1,8 +1,8 @@
 import { auth, db } from './config' //llamamos la autentificacion y la base de datos
-    import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'//trae las funciones propias de firebase
-    import { doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'//trae las funciones propias de firebase
+import { doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, Timestamp } from 'firebase/firestore'
 
-    export const AuthService = {
+export const AuthService = {
     // Función auxiliar para capitalizar el nombre 
     //capitalizar poner la primera letra en mayuscula y el resto en minuscula
     capitalizeUsername(username) {
@@ -124,5 +124,22 @@ import { auth, db } from './config' //llamamos la autentificacion y la base de d
         error: errorMessages[error.code] || 'Error en la autenticación',
         code: error.code
         }
+    }
+}
+
+///*************************************** */
+export async function createPlayer(userId, nickname, avatarUrl) {
+    try {
+        const playerRef = await addDoc(collection(db, 'players'), {
+            user_id: userId, // Relación con el usuario en la colección `users`
+            nickname: nickname,
+            avatar_url: avatarUrl,
+            created_at: Timestamp.now() // Fecha y hora actual
+        });
+        console.log('Jugador creado con ID:', playerRef.id);
+        return { success: true, player_id: playerRef.id };
+    } catch (error) {
+        console.error('Error creando jugador:', error);
+        return { success: false, error: error.message };
     }
 }

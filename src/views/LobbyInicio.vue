@@ -1,90 +1,13 @@
 <script setup>
 import Logo from "../components/logo.vue";
-import { onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import Swal from "sweetalert2"; // Importa SweetAlert2
-import "sweetalert2/dist/sweetalert2.min.css"; // Importa los estilos de SweetAlert2
-
-import user1 from "@/assets/user1.png";
-import user2 from "@/assets/user2.png";
-import user3 from "@/assets/user3.png";
-import user4 from "@/assets/user4.png";
 
 const router = useRouter();
 
-// Función para cerrar sesión
 const cerrarSesion = () => {
   console.log("Cerrando sesión...");
   router.push("/");
 };
-
-// Función para mostrar la alerta al ingresar
-const mostrarAlerta = async () => {
-  // Recuperar datos del localStorage
-  const savedUsername = localStorage.getItem("username") || "";
-  const savedAvatar = localStorage.getItem("avatar") || "";
-
-  const { value: formValues } = await Swal.fire({
-    title: "UNO",
-    html: `
-      <div class="mb-3">
-        <label for="username" class="form-label">Username:</label>
-        <input id="username" class="swal2-input" placeholder="Username" value="${savedUsername}">
-      </div>
-      <div class="mb-3">
-        <label for="avatar" class="form-label">Selecciona tu avatar</label>
-        <div class="d-flex justify-content-around">
-          <img src="${user1}" id="avatar1" class="avatar-option ${savedAvatar === "avatar1" ? "selected" : ""}" style="width: 50px; cursor: pointer;" onclick="selectAvatar('avatar1')">
-          <img src="${user2}" id="avatar2" class="avatar-option ${savedAvatar === "avatar2" ? "selected" : ""}" style="width: 50px; cursor: pointer;" onclick="selectAvatar('avatar2')">
-          <img src="${user3}" id="avatar3" class="avatar-option ${savedAvatar === "avatar3" ? "selected" : ""}" style="width: 50px; cursor: pointer;" onclick="selectAvatar('avatar3')">
-          <img src="${user4}" id="avatar4" class="avatar-option ${savedAvatar === "avatar4" ? "selected" : ""}" style="width: 50px; cursor: pointer;" onclick="selectAvatar('avatar4')">
-        </div>
-      </div>
-    `,
-    focusConfirm: false,
-    showCancelButton: true,
-    confirmButtonText: "Guardar",
-    preConfirm: () => {
-      const username = document.getElementById("username").value;
-      const selectedAvatar = document.querySelector(".avatar-option.selected");
-      if (!username || !selectedAvatar) {
-        Swal.showValidationMessage("Por favor ingresa un nombre de usuario y selecciona un avatar.");
-        return null;
-      }
-      return {
-        username,
-        avatar: selectedAvatar.id,
-      };
-    },
-  });
-
-  if (formValues) {
-    // Guardar el nombre de usuario y el avatar en localStorage
-    localStorage.setItem("username", formValues.username);
-    localStorage.setItem("avatar", formValues.avatar);
-
-    console.log("Usuario guardado en localStorage:", formValues.username);
-    console.log("Avatar guardado en localStorage:", formValues.avatar);
-
-  }
-};
-
-// Función para seleccionar un avatar
-window.selectAvatar = (avatarId) => {
-  // Eliminar la clase "selected" de todos los avatares
-  document.querySelectorAll(".avatar-option").forEach((avatar) => {
-    avatar.classList.remove("selected");
-  });
-
-  // Agregar la clase "selected" al avatar seleccionado
-  const selectedAvatar = document.getElementById(avatarId);
-  selectedAvatar.classList.add("selected");
-};
-
-// Agregar evento para mostrar la alerta al cargar la página
-onMounted(() => {
-  mostrarAlerta();
-});
 </script>
 
 <template>
@@ -106,6 +29,18 @@ onMounted(() => {
     </button>
   </div>
 </template>
+
+<script setup>
+import Logo from "../components/logo.vue";
+import { RouterLink, useRouter } from "vue-router";
+
+const router = useRouter();
+
+const cerrarSesion = () => {
+  console.log("Cerrando sesión...");
+  router.push("/");
+};
+</script>
 
 <style >
 .logo-container {
