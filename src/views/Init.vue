@@ -1,35 +1,72 @@
-<script setup>
-import { ref } from 'vue'
-import Logo from '../components/logo.vue'
-import FormLogin from '../components/Login/FormLogin.vue'
-import FormRegister from '../components/Login/FormRegister.vue'
-
-const showLogin = ref(true)
-
-const toggleForm = () => {
-    showLogin.value = !showLogin.value
-}
-</script>
-
 <template>
-    <main class="container justify-content-center align-items-center d-flex flex-column" style="height: 100vh;">
-        <div class="row logo-container mb-4 mx-auto">
-            <Logo />
+    <main class="d-flex justify-content-center align-items-center flex-column body vh-100">
+        <div class="col-12 mx-auto logo-container m-2">
+            <logo class="logo-small" />
         </div>
         <div class="row">
-            <component :is="showLogin ? FormLogin : FormRegister" />
+            <form @submit.prevent="handleLogin">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="email" id="email" v-model="email" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" v-model="password" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+            </form>
         </div>
         <div class="row mt-3">
-            <button class="btn btn-primary" @click="toggleForm">
-                {{ showLogin ? 'Registrarse' : 'Iniciar sesión' }}
-            </button>
+            <p class="text-center">
+                No tienes cuenta? <router-link to="/">Registrate</router-link>
+            </p>
         </div>
     </main>
 </template>
 
-<style>
-    .logo-container {
-        width: 40%;
-        max-width: 300px;
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+import Logo from '../components/logo.vue';
+import { AuthService } from '../firebase/auth';
+
+// Variables reactivas
+const email = ref('');
+const password = ref('');
+const router = useRouter();
+
+// Función para manejar el inicio de sesión
+const handleLogin = async () => {
+    if (!email.value || !password.value) {
+        Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+        return;
     }
+
+    try {
+        console.log('Intentando iniciar sesión con:', email.value, password.value);
+        const { success, user, error } = await AuthService.login({
+            email: email.value,
+            password: password.value,
+        });
+
+        console.log('Respuesta de AuthService.login:', { success, user, error });
+
+        if (success) {
+            Swal.fire('¡Inicio de sesión exitoso!', `Bienvenido`, 'success');
+            router.push('/lobbyInicio'); // Redirige a RegisterOpen.vue
+        } else {
+            Swal.fire('Error', error || 'Correo o contraseña incorrectos.', 'error');
+        }
+    } catch (err) {
+        console.error('Error en el inicio de sesión:', err);
+        Swal.fire('Error', 'Ocurrió un problema al autenticar.', 'error');
+    }
+};
+</script>
+
+<style>
+.logo-container {
+    width: 10%;
+}
 </style>

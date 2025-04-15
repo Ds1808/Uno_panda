@@ -4,6 +4,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/",
+      name: "register",
+      component: () => import("../views/RegisterOpen.vue"), // Ruta predeterminada al registro
+    },
+    {
       path: "/gameBoard",
       name: "game-board",
       component: () => import("../views/GameBoard.vue"),
@@ -14,14 +19,24 @@ const router = createRouter({
       component: () => import("../views/LobbyInicio.vue"),
     },
     {
-      path: '/init',
-      name: 'init',
-      component: () => import('../views/Init.vue'),
+      path: "/login",
+      name: "init",
+      component: () => import("../views/Init.vue"),
     },
     {
-      path: '/CreateGame',
-      name: 'CreateGame',
-      component: () => import('../views/CreateGame.vue'),
+      path: "/CreateGame",
+      name: "CreateGame",
+      component: () => import("../views/CreateGame.vue"),
+    },
+    {
+      path: "/unirsePartida",
+      name: "Partida",
+      component: () => import("../views/FormUnirse.vue"),
+    },
+    {
+      path: "/Lobbypartida/:codigo",
+      name: "Partida",
+      component: () => import("../views/LobbyPartida.vue"),
     },
   ],
 });
