@@ -10,11 +10,7 @@
         <tbody>
           <tr v-for="(jugador, index) in jugadores" :key="index">
             <td>{{ jugador.nombre }}</td>
-            <td>{{ jugador.puntos }}</td>
-          </tr>
-          <tr>
-            <td>Jugador 1</td>
-            <td>1</td>
+            <td>{{ jugador.turno }}</td>
           </tr>
         </tbody>
       </table>
