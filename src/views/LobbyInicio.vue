@@ -63,7 +63,7 @@ const cerrarSesion = () => {
   router.push("/");
 };
 
-// Función para crear un jugador
+// Función para crear o actualizar un jugador
 const crearJugador = async (username, avatarUrl) => {
   const userId = auth.currentUser?.uid; // Obtén el UID del usuario autenticado
 
@@ -72,11 +72,12 @@ const crearJugador = async (username, avatarUrl) => {
     return;
   }
 
+  // Llamar a la función createPlayer para crear o actualizar el jugador
   const result = await createPlayer(userId, username, avatarUrl);
   if (result.success) {
-    console.log("Jugador creado con éxito:", result.player_id);
+    console.log("Jugador actualizado o creado con éxito:", result.player_id);
   } else {
-    console.error("Error al crear jugador:", result.error);
+    console.error("Error al actualizar o crear jugador:", result.error);
   }
 };
 
@@ -138,6 +139,7 @@ const mostrarAlerta = async () => {
     preConfirm: () => {
       const username = document.getElementById("username").value;
       const selectedAvatar = document.querySelector(".avatar-option.selected");
+      console.log("Avatar seleccionado:", selectedAvatar);
       if (!username || !selectedAvatar) {
         Swal.showValidationMessage("Por favor ingresa un nombre de usuario y selecciona un avatar.");
         return null;
@@ -156,14 +158,13 @@ const mostrarAlerta = async () => {
 
     // Actualizar las variables reactivas
     username.value = formValues.username;
-    avatarUrl.value = getAvatarUrl(formValues.avatar);
+    avatarUrl.value = getAvatarUrl(formValues.avatar); // Usar la variable reactiva directamente
 
     console.log("Usuario guardado en localStorage:", formValues.username);
     console.log("Avatar guardado en localStorage:", formValues.avatar);
 
     // Crear jugador después de guardar los datos
-    const avatarUrl = getAvatarUrl(formValues.avatar);
-    await crearJugador(formValues.username, avatarUrl);
+    await crearJugador(formValues.username, avatarUrl.value); // Usar avatarUrl.value
   }
 };
 

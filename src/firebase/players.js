@@ -1,23 +1,29 @@
 import { db } from './config';
-import { collection, addDoc, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, Timestamp, doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Función para crear un jugador en la colección "players"
-export async function createPlayer(userId, nickname, avatarUrl) {
-    try {
-        const playerRef = await addDoc(collection(db, 'players'), {
-            user_id: userId, // Relación con el usuario en la colección "users"
-            nickname: nickname,
-            avatar_url: avatarUrl,
-            created_at: Timestamp.now(), // Fecha y hora actual
-        });
+// Función para crear o actualizar un jugador en la colección "players"
+export const createPlayer = async (userId, username, avatarUrl) => {
+  try {
+    const playerRef = doc(db, "players", userId);
 
-        console.log('Jugador creado con ID:', playerRef.id);
-        return { success: true, player_id: playerRef.id };
-    } catch (error) {
-        console.error('Error creando jugador:', error);
-        return { success: false, error: error.message };
+    // Verificar si el jugador ya existe
+    const playerDoc = await getDoc(playerRef);
+    if (playerDoc.exists()) {
+      // Actualizar el jugador existente
+      await setDoc(playerRef, { username, avatarUrl }, { merge: true });
+      console.log("Jugador actualizado con ID:", userId);
+      return { success: true, player_id: userId };
     }
-}
+
+    // Crear un nuevo jugador si no existe
+    await setDoc(playerRef, { username, avatarUrl });
+    console.log("Jugador creado con ID:", userId);
+    return { success: true, player_id: userId };
+  } catch (error) {
+    console.error("Error al crear o actualizar el jugador:", error);
+    return { success: false, error: error.message };
+  }
+};
 
 // Función para obtener jugadores relacionados con un usuario
 export async function getPlayersByUserId(userId) {
