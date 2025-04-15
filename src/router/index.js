@@ -33,6 +33,11 @@ const router = createRouter({
       name: "Partida",
       component: () => import("../views/FormUnirse.vue"),
     },
+    {
+      path: "/Lobbypartida/:codigo",
+      name: "Partida",
+      component: () => import("../views/LobbyPartida.vue"),
+    },
   ],
 });
 
