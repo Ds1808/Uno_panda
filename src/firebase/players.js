@@ -1,24 +1,46 @@
 import { db } from './config';
-import { collection, addDoc, query, where, getDocs, Timestamp, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
 
 // Función para crear o actualizar un jugador en la colección "players"
-export const createPlayer = async (userId, username, avatarUrl) => {
+export const createPlayer = async (userId, nickname, avatarUrl) => {
   try {
-    const playerRef = doc(db, "players", userId);
+    const playersRef = collection(db, "players");
 
-    // Verificar si el jugador ya existe
-    const playerDoc = await getDoc(playerRef);
-    if (playerDoc.exists()) {
-      // Actualizar el jugador existente
-      await setDoc(playerRef, { username, avatarUrl }, { merge: true });
-      console.log("Jugador actualizado con ID:", userId);
-      return { success: true, player_id: userId };
+    // Verificar si ya existe un jugador relacionado con este userId
+    const q = query(playersRef, where("user_id", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      // Si el jugador ya existe, actualizar su información
+      const playerDoc = querySnapshot.docs[0]; // Tomar el primer jugador encontrado
+      const playerId = playerDoc.id;
+
+      await setDoc(doc(db, "players", playerId), { nickname, avatarUrl }, { merge: true });
+      console.log("Jugador actualizado con ID:", playerId);
+      return { success: true, player_id: playerId };
     }
 
-    // Crear un nuevo jugador si no existe
-    await setDoc(playerRef, { username, avatarUrl });
-    console.log("Jugador creado con ID:", userId);
-    return { success: true, player_id: userId };
+    // Si no existe, crear un nuevo jugador con un ID único
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleString("es-ES", {
+      timeZone: "America/Bogota", // Cambia esto según tu zona horaria
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+
+    const newPlayer = await addDoc(playersRef, {
+      user_id: userId,
+      nickname, // Guardar como nickname
+      avatarUrl,
+      created_at: formattedDate, // Fecha de creación formateada
+    });
+
+    console.log("Jugador creado con ID:", newPlayer.id);
+    return { success: true, player_id: newPlayer.id };
   } catch (error) {
     console.error("Error al crear o actualizar el jugador:", error);
     return { success: false, error: error.message };
