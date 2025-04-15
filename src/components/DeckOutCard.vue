@@ -16,13 +16,16 @@ const props = defineProps({
     <div class="card-uno" :class="color">
       <div class="card-content">
         <div class="card-corner top-left">
-          <span class="number">{{ number }}</span>
+          <i v-if="number === 'wild'" class="bi bi-asterisk number"></i>
+          <span v-else class="number">{{ number }}</span>
         </div>
         <div class="card-center bg-white rounded-circle">
-          <span class="number text-black">{{ number }}</span>
+          <i v-if="number === 'wild'" class="bi bi-asterisk text-black"></i>
+          <span v-else class="number text-black">{{ number }}</span>
         </div>
         <div class="card-corner bottom-right">
-          <span class="number">{{ number }}</span>
+          <i v-if="number === 'wild'" class="bi bi-asterisk number"></i>
+          <span v-else class="number">{{ number }}</span>
         </div>
       </div>
     </div>
