@@ -1,10 +1,10 @@
 <template>
-    <main class="d-flex justify-content-center align-items-center flex-column body vh-100">
+    <main class="d-flex justify-content-center align-items-center flex-column body" style="height: 100vh;">
         <div class="col-12 mx-auto logo-container m-2">
             <logo class="logo-small" />
         </div>
-        <div class="row">
-            <form @submit.prevent="handleLogin">
+        <div class="row justify-content-center w-100">
+            <form @submit.prevent="handleLogin" class="col-md-6">
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo electrónico</label>
                     <input type="email" id="email" v-model="email" class="form-control" required />
@@ -13,11 +13,11 @@
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" id="password" v-model="password" class="form-control" required />
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                <button type="submit" class="btn btn-outline-danger fw-bold mt-2 w-100">Iniciar Sesión</button>
             </form>
         </div>
         <div class="row mt-3">
-            <p class="text-center">
+            <p class="text-center ">
                 No tienes cuenta? <router-link to="/">Registrate</router-link>
             </p>
         </div>

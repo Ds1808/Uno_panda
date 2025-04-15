@@ -1,6 +1,5 @@
 <template>
     <main class="d-flex justify-content-center align-items-center flex-column body" style="height: 100vh;">
-        <div class="row w-25 container"></div>
         <!-- Logo en la parte superior -->
             <div class="col-12 mx-auto logo-container m-2">
                 <logo class="logo-small" />

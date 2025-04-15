@@ -4,28 +4,39 @@
   >
     <Logo class="row logo-container mb-4" />
 
+    <div class="d-flex flex-row align-items-end border-bottom border-danger rounded mb-4 gap-2 p-2">
+      <!-- Mostrar el nombre del usuario -->
+      <h3 class="col text-start" style="color: white;">{{ username }}</h3>
+      <!-- Mostrar la imagen del avatar -->
+      <div class="col text-end">
+        <img :src="avatarUrl" alt="Avatar" class="avatar-display" />
+      </div>
+    </div>
+
     <div class="d-grid gap-3 w-25">
       <RouterLink to="/createGame" class="btn btn-danger btn-lg">Crear sala</RouterLink>
       <RouterLink to="/unirsePartida" class="btn btn-primary btn-lg">Unirse a sala</RouterLink>
     </div>
 
     <div class="d-flex gap-3 mt-4">
-        <button
+      <button
         class="btn btn-outline-warning fw-bold mt-5 px-4 py-2"
         @click="cerrarSesion"
       >
         Cerrar sesión
       </button>
-      <button class="btn btn-outline-success fw-bold mt-5 px-4 py-2 bi bi-person-fill-gear" @click="mostrarAlerta">
+      <button
+        class="btn btn-outline-success fw-bold mt-5 px-4 py-2 bi bi-person-fill-gear"
+        @click="mostrarAlerta"
+      >
       </button>
     </div>
-
   </div>
 </template>
 
 <script setup>
 import Logo from "../components/logo.vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -40,9 +51,15 @@ import { createPlayer } from "../firebase/players"; // Asegúrate de que la ruta
 
 const router = useRouter();
 
+// Variables reactivas para el nombre de usuario y la URL del avatar
+const username = ref("");
+const avatarUrl = ref("");
+
 // Función para cerrar sesión
 const cerrarSesion = () => {
   console.log("Cerrando sesión...");
+  localStorage.removeItem("username");
+  localStorage.removeItem("avatar");
   router.push("/");
 };
 
@@ -62,6 +79,36 @@ const crearJugador = async (username, avatarUrl) => {
     console.error("Error al crear jugador:", result.error);
   }
 };
+
+// Función para obtener la URL del avatar seleccionado
+const getAvatarUrl = (avatarId) => {
+  switch (avatarId) {
+    case "avatar1":
+      return user1;
+    case "avatar2":
+      return user2;
+    case "avatar3":
+      return user3;
+    case "avatar4":
+      return user4;
+    default:
+      return "";
+  }
+};
+
+// Agregar evento para mostrar la alerta al cargar la página
+onMounted(() => {
+  const savedUsername = localStorage.getItem("username");
+  const savedAvatar = localStorage.getItem("avatar");
+
+  if (savedUsername && savedAvatar) {
+    // Cargar los datos del usuario desde el localStorage
+    username.value = savedUsername;
+    avatarUrl.value = getAvatarUrl(savedAvatar);
+  } else {
+    mostrarAlerta();
+  }
+});
 
 // Función para mostrar la alerta al ingresar
 const mostrarAlerta = async () => {
@@ -107,28 +154,16 @@ const mostrarAlerta = async () => {
     localStorage.setItem("username", formValues.username);
     localStorage.setItem("avatar", formValues.avatar);
 
+    // Actualizar las variables reactivas
+    username.value = formValues.username;
+    avatarUrl.value = getAvatarUrl(formValues.avatar);
+
     console.log("Usuario guardado en localStorage:", formValues.username);
     console.log("Avatar guardado en localStorage:", formValues.avatar);
 
     // Crear jugador después de guardar los datos
     const avatarUrl = getAvatarUrl(formValues.avatar);
     await crearJugador(formValues.username, avatarUrl);
-  }
-};
-
-// Función para obtener la URL del avatar seleccionado
-const getAvatarUrl = (avatarId) => {
-  switch (avatarId) {
-    case "avatar1":
-      return user1;
-    case "avatar2":
-      return user2;
-    case "avatar3":
-      return user3;
-    case "avatar4":
-      return user4;
-    default:
-      return "";
   }
 };
 
@@ -143,19 +178,9 @@ window.selectAvatar = (avatarId) => {
   const selectedAvatar = document.getElementById(avatarId);
   selectedAvatar.classList.add("selected");
 };
-
-// Agregar evento para mostrar la alerta al cargar la página
-onMounted(() => {
-  const savedUsername = localStorage.getItem("username");
-  const savedAvatar = localStorage.getItem("avatar");
-  
-  if (!savedUsername || !savedAvatar) {
-    mostrarAlerta();
-  }
-});
 </script>
 
-<style >
+<style scoped>
 .logo-container {
   width: 15%;
 }
@@ -176,5 +201,12 @@ onMounted(() => {
 
 .avatar-option.selected {
   border-color: #ff0000;
+}
+
+.avatar-display {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-top: 10px;
 }
 </style>
