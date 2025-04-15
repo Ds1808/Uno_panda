@@ -54,7 +54,10 @@ const handleLogin = async () => {
 
         if (success) {
             Swal.fire('¡Inicio de sesión exitoso!', `Bienvenido`, 'success');
-            router.push('/lobbyInicio'); // Redirige a RegisterOpen.vue
+            setTimeout(() => {
+                router.push('/lobbyInicio'); // Redirige a lobbyinicio.vue
+            }, 1300);
+            
         } else {
             Swal.fire('Error', error || 'Correo o contraseña incorrectos.', 'error');
         }
