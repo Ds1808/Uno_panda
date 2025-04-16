@@ -6,14 +6,19 @@ import DeckInCard from '../components/DeckInCard.vue';
 import UnoButton from '../components/UnoButton.vue';
 import ExitButton from '../components/ExitButton.vue';
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router'; // Importar para obtener parámetros de la ruta
-import { initializeGame, fetchGameParticipants, fetchPlayerCards } from '../firebase/games'; // Importa las funciones desde games.js
+import { useRoute } from 'vue-router';
+import {
+  initializeGame,
+  fetchGameParticipants,
+  fetchPlayerCards,
+  updateGameStateWithCard,
+} from '../firebase/games'; // Importa la función para actualizar el estado del juego
 
-
-const currentCard = ref({ number: '7', color: 'red' });
+const currentCard = ref({ number: '', color: '' }); // Carta actual
 const gameCode = ref(''); // Código de la partida obtenido de la ruta
 const players = ref([]); // Lista de jugadores en la sala
 const playerCards = ref({}); // Objeto para almacenar las cartas de cada jugador
+const gameStarted = ref(false); // Estado del juego (si ha comenzado o no)
 const route = useRoute();
 
 const handleUnoCalled = () => {
@@ -29,11 +34,35 @@ const handleCardPlayed = (cardData) => {
   currentCard.value = cardData;
 };
 
+// Función para iniciar la partida
+const startGame = async () => {
+  try {
+    // Generar una carta aleatoria
+    const colors = ['red', 'blue', 'green', 'yellow'];
+    const numbers = Array.from({ length: 10 }, (_, i) => i.toString());
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomNumber = numbers[Math.floor(Math.random() * numbers.length)];
+
+    // Actualizar la carta inicial
+    currentCard.value = { number: randomNumber, color: randomColor };
+
+    // Actualizar el estado del juego en Firestore
+    await updateGameStateWithCard(gameCode.value, currentCard.value);
+
+    // Cambiar el estado del juego a iniciado
+    gameStarted.value = true;
+
+    console.log('Partida iniciada con la carta:', currentCard.value);
+  } catch (error) {
+    console.error('Error al iniciar la partida:', error);
+  }
+};
+
 // Inicializar el juego al montar el componente
 onMounted(async () => {
   try {
     // Obtener el código de la partida desde la ruta
-    gameCode.value = route.params.codigo; // Asegúrate de que el parámetro de la ruta se llame "gameCode"
+    gameCode.value = route.params.codigo;
     console.log('Código de la partida:', gameCode.value);
 
     // Obtener los participantes de la partida desde Firestore
@@ -46,6 +75,9 @@ onMounted(async () => {
     // Obtener las cartas de los jugadores
     playerCards.value = await fetchPlayerCards(gameCode.value);
     console.log('Cartas de los jugadores obtenidas:', playerCards.value);
+
+    // Verificar si el juego ya ha comenzado
+    gameStarted.value = currentCard.value.number !== '' && currentCard.value.color !== '';
   } catch (error) {
     console.error('Error al inicializar el juego:', error);
   }
@@ -90,7 +122,21 @@ onMounted(async () => {
         <!-- Tablero central -->
         <div class="game-board">
           <div class="deck-placeholder">
-            <DeckOutCard :number="currentCard.number" :color="currentCard.color" />
+            <!-- Mostrar el botón de iniciar partida si el juego no ha comenzado -->
+            <button
+              v-if="!gameStarted"
+              class="btn btn-primary btn-lg"
+              @click="startGame"
+            >
+              Iniciar partida
+            </button>
+
+            <!-- Mostrar la carta central si el juego ha comenzado -->
+            <DeckOutCard
+              v-else
+              :number="currentCard.number"
+              :color="currentCard.color"
+            />
           </div>
         </div>
 

@@ -1,5 +1,24 @@
 import { db } from './config';
-import { collection, doc, getDocs, addDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+
+/**
+ * Actualiza el estado del juego con la carta inicial.
+ * @param {string} gameCode - Código de la partida.
+ * @param {Object} card - Carta inicial (número y color).
+ */
+export async function updateGameStateWithCard(gameCode, card) {
+  try {
+    const gameRef = doc(db, 'games', gameCode);
+    await updateDoc(gameRef, {
+      status: 'in_progress', // Cambiar el estado del juego a "en progreso"
+      current_card: card, // Guardar la carta inicial
+    });
+    console.log('Estado del juego actualizado con la carta inicial:', card);
+  } catch (error) {
+    console.error('Error al actualizar el estado del juego:', error);
+    throw error;
+  }
+}
 
 // Función para obtener todas las cartas desde la colección "cards"
 export async function getAllCards() {
