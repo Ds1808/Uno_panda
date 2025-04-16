@@ -1,29 +1,55 @@
 <script setup>
-import AvatarUser from '../components/AvatarUser.vue'
-import HandPlayer from '../components/HandPlayer.vue'
-import HandOpponent from '../components/HandOpponent.vue'
-import DeckOutCard from '../components/DeckOutCard.vue'
-import DeckInCard from '../components/DeckInCard.vue'
-import UnoButton from '../components/UnoButton.vue'
-import ExitButton from '../components/ExitButton.vue'
-import { ref } from 'vue'
+import AvatarUser from '../components/AvatarUser.vue';
+import HandOpponent from '../components/HandOpponent.vue';
+import DeckOutCard from '../components/DeckOutCard.vue';
+import DeckInCard from '../components/DeckInCard.vue';
+import UnoButton from '../components/UnoButton.vue';
+import ExitButton from '../components/ExitButton.vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router'; // Importar para obtener parámetros de la ruta
+import { initializeGame, fetchGameParticipants, fetchPlayerCards } from '../firebase/games'; // Importa las funciones desde games.js
 
-const currentCard = ref({ number: '7', color: 'red' })
+
+const currentCard = ref({ number: '7', color: 'red' });
+const gameCode = ref(''); // Código de la partida obtenido de la ruta
+const players = ref([]); // Lista de jugadores en la sala
+const playerCards = ref({}); // Objeto para almacenar las cartas de cada jugador
+const route = useRoute();
 
 const handleUnoCalled = () => {
-  // Aquí puedes agregar la lógica cuando se presiona el botón UNO
-  console.log('¡UNO! fue llamado')
-}
+  console.log('¡UNO! fue llamado');
+};
 
 const handleExitGame = () => {
-  // Aquí puedes agregar la lógica para salir del juego
-  console.log('Saliendo del juego...')
-}
+  console.log('Saliendo del juego...');
+};
 
 const handleCardPlayed = (cardData) => {
-  console.log('Carta jugada:', cardData)
-  currentCard.value = cardData
-}
+  console.log('Carta jugada:', cardData);
+  currentCard.value = cardData;
+};
+
+// Inicializar el juego al montar el componente
+onMounted(async () => {
+  try {
+    // Obtener el código de la partida desde la ruta
+    gameCode.value = route.params.codigo; // Asegúrate de que el parámetro de la ruta se llame "gameCode"
+    console.log('Código de la partida:', gameCode.value);
+
+    // Obtener los participantes de la partida desde Firestore
+    players.value = await fetchGameParticipants(gameCode.value);
+    console.log('Jugadores obtenidos desde Firestore:', players.value);
+
+    // Inicializar el juego y asignar cartas
+    await initializeGame(gameCode.value, players.value);
+
+    // Obtener las cartas de los jugadores
+    playerCards.value = await fetchPlayerCards(gameCode.value);
+    console.log('Cartas de los jugadores obtenidas:', playerCards.value);
+  } catch (error) {
+    console.error('Error al inicializar el juego:', error);
+  }
+});
 </script>
 
 <template>
@@ -46,6 +72,7 @@ const handleCardPlayed = (cardData) => {
           </div>
         </div>
       </div>
+
 
       <div class="middle-section">
         <!-- Oponente izquierdo -->
@@ -148,6 +175,7 @@ const handleCardPlayed = (cardData) => {
 .opponent-section.right .hand-opponent {
   transform: rotate(90deg);
 }
+
 
 .game-board {
   flex: 1;
